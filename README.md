@@ -9,7 +9,12 @@ The code is well commented and should be easy to read.
 
 Prerequisites
 -------------
-You will need [curl](https://curl.haxx.se/) to build the app.
+You will need proper version ssl(1.0.x) and [curl](https://curl.haxx.se/) to build the app.
+```
+for debian
+sudo apt install libssl1.0-dev
+sudo apt install libcurl4-gnutls-dev
+```
 
 
 Usage
@@ -29,6 +34,7 @@ make
 Run the program:
 ```
 ./ipconvif -cIp '<camera-ip>' -cUsr '<camera-username>' -cPwd '<camera-password>'
+  ex) ./ipconvif -cIp '192.168.0.5' -cUsr 'admin' -cPwd 'adminpassword'
 ```
 
 
