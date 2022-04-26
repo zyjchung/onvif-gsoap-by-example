@@ -136,6 +136,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
+		printf("Error %s %d\n",__FUNCTION__,__LINE__);
 		PrintErr(proxyDevice.soap);
 		return -1;
 	}
@@ -167,7 +168,7 @@ printf("\n");
 		if (tds__GetCapabilitiesResponse->Capabilities->Device != NULL)
 		{
 			processEventLog(__FILE__, __LINE__, stdout, "-------------------Device-------------------");
-			processEventLog(__FILE__, __LINE__, stdout, "XAddr:%s", tds__GetCapabilitiesResponse->Capabilities->Events->XAddr.c_str());
+			processEventLog(__FILE__, __LINE__, stdout, "XAddr:%s", tds__GetCapabilitiesResponse->Capabilities->Device->XAddr.c_str());
 			if (tds__GetCapabilitiesResponse->Capabilities->Device->Network != NULL)
 			{
 				processEventLog(__FILE__, __LINE__, stdout, "-------------------Network-------------------");
@@ -214,8 +215,22 @@ printf("\n");
 			if (tds__GetCapabilitiesResponse->Capabilities->Device->IO != NULL)
 			{
 				processEventLog(__FILE__, __LINE__, stdout, "-------------------IO-------------------");
-				processEventLog(__FILE__, __LINE__, stdout, "InputConnectors:%d", *tds__GetCapabilitiesResponse->Capabilities->Device->IO->InputConnectors);
-				processEventLog(__FILE__, __LINE__, stdout, "RelayOutputs:%d", *tds__GetCapabilitiesResponse->Capabilities->Device->IO->RelayOutputs);
+				if(tds__GetCapabilitiesResponse->Capabilities->Device->IO->InputConnectors != NULL)
+				{
+						processEventLog(__FILE__, __LINE__, stdout, "InputConnectors:%d", *tds__GetCapabilitiesResponse->Capabilities->Device->IO->InputConnectors);
+				}
+				else
+				{
+					printf("Check here %s %d\n",__FUNCTION__,__LINE__);
+				}
+				if(tds__GetCapabilitiesResponse->Capabilities->Device->IO->RelayOutputs != NULL)
+				{
+					processEventLog(__FILE__, __LINE__, stdout, "RelayOutputs:%d", *tds__GetCapabilitiesResponse->Capabilities->Device->IO->RelayOutputs);
+				}
+				else
+				{
+					printf("Check here %s %d\n",__FUNCTION__,__LINE__);
+				}
 				processEventLog(__FILE__, __LINE__, stdout, "__anyAttribute:%s", tds__GetCapabilitiesResponse->Capabilities->Device->IO->__anyAttribute);
 				if (tds__GetCapabilitiesResponse->Capabilities->Device->IO->Extension != NULL)
 				{
@@ -448,9 +463,11 @@ printf("\n\n\n");
 
 				// Create a 'Snapshot' instance
 				Snapshot *snapshot = new Snapshot("./downloads", dateString);
+				printf("Error %s %d\n",__FUNCTION__,__LINE__);
 
 				// Download snapshot file locally
 				CURLcode result = snapshot->download(trt__GetSnapshotUriResponse->MediaUri->Uri);
+				printf("Error %s %d\n",__FUNCTION__,__LINE__);
 
 #ifdef WITH_FTP_UPLOAD
 				if(CURLE_OK == result) {
@@ -466,15 +483,18 @@ printf("\n\n\n");
 			}
 			else
 			{
+				printf("Error %s %d",__FUNCTION__,__LINE__);
 				PrintErr(proxyMedia.soap);
 			}
 		}
 	}
 	else
 	{
+		printf("Error %s %d",__FUNCTION__,__LINE__);
 		PrintErr(proxyMedia.soap);
 	}
 
+	printf("\nEnd\n");
 	// MediaBindingProxy ends
 	soap_destroy(soap);
 	soap_end(soap);
